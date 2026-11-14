@@ -81,8 +81,11 @@ public struct World {
                 actual: "검사 후 지도 자료를 읽지 못함")])
         }
         let d = [UInt8](try Data(contentsOf: dir.appendingPathComponent("MONSTER.DAT")))
-        seaEventPoints = stride(from: 0, to: max(0, d.count - 4), by: 5).map { k in
-            (Int(d[k]) | Int(d[k + 1]) << 8, Int(d[k + 2]) | Int(d[k + 3]) << 8, Int(d[k + 4]))
+        seaEventPoints = stride(from: 0, to: max(0, d.count - 4), by: 5).map { k -> (Int, Int, Int) in
+            let x = Int(d[k]) | (Int(d[k + 1]) << 8)
+            let y = Int(d[k + 2]) | (Int(d[k + 3]) << 8)
+            let kind = Int(d[k + 4])
+            return (x, y, kind)
         }
         DataSegment.loadNames([UInt8](try Data(contentsOf: dir.appendingPathComponent("NAME.TBL"))))
     }
