@@ -1,0 +1,22 @@
+name: Source checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source-only boundary
+        run: python3 tools/audit_public_source.py
+      - name: Verify data-exclusion regressions
+        run: python3 -m unittest discover -s tools/tests -v
+      - name: Build common engine
+        run: swift build --package-path core
+      - name: Test common engine without original data
+        run: swift test --package-path core
+      - name: Build macOS application source
+        run: swift build --package-path macos -c release --product Portolan
