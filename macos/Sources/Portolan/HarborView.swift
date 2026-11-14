@@ -450,8 +450,11 @@ private struct NavigatorPanel: View {
                         if k < v.ships.count - 1 {
                             Text("\(v.ships[k + 1].name) 선장").font(GameFont.caption)
                         } else {
-                            GamePicker("담당 직책", selection: Binding(get: { o.post }, set: { p in game.act { $0.appoint(k, to: p) } }),
-                                       options: [(OfficerPost?.none, "—")] + OfficerPost.allCases.map { (OfficerPost?.some($0), $0.name) })
+                            let officerOptions: [(OfficerPost?, String)] = [(nil, "—")] + OfficerPost.allCases.map { post -> (OfficerPost?, String) in
+                            (post, post.name)
+                        }
+                        GamePicker("담당 직책", selection: Binding(get: { o.post }, set: { p in game.act { $0.appoint(k, to: p) } }),
+                                       options: officerOptions)
                                 .frame(width: 150)
                         }
                         Button("해고") { game.dismissOfficer(k) }.disabled(v.spareCaptains <= 0).font(GameFont.caption)

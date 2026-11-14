@@ -103,8 +103,11 @@ struct FleetInfoView: View {
                     if k < v.ships.count - 1 {
                         Text("선장")
                     } else {
+                        let officerOptions: [(OfficerPost?, String)] = [(nil, "항해사")] + OfficerPost.allCases.map { post -> (OfficerPost?, String) in
+                            (post, post.name)
+                        }
                         GamePicker("직책", selection: Binding(get: { o.post }, set: { p in game.act { $0.appoint(k, to: p) } }),
-                                   options: [(OfficerPost?.none, "항해사")] + OfficerPost.allCases.map { (OfficerPost?.some($0), $0.name) })
+                                   options: officerOptions)
                             .frame(width: 150)
                     }
                     Text("\(o.navLevel) · \(o.battleLevel)").monospacedDigit()
