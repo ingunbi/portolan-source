@@ -106,7 +106,7 @@ struct FleetInfoView: View {
                         let officerOptions: [(OfficerPost?, String)] = [(nil, "항해사")] + OfficerPost.allCases.map { post -> (OfficerPost?, String) in
                             (post, post.name)
                         }
-                        GamePicker("직책", selection: Binding(get: { o.post }, set: { p in game.act { $0.appoint(k, to: p) } }),
+                        GamePicker("직책", selection: Binding<OfficerPost?>(get: { o.post }, set: { p in _ = game.act { $0.appoint(k, to: p) } }),
                                    options: officerOptions)
                             .frame(width: 150)
                     }

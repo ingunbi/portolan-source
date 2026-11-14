@@ -453,7 +453,7 @@ private struct NavigatorPanel: View {
                             let officerOptions: [(OfficerPost?, String)] = [(nil, "—")] + OfficerPost.allCases.map { post -> (OfficerPost?, String) in
                             (post, post.name)
                         }
-                        GamePicker("담당 직책", selection: Binding(get: { o.post }, set: { p in game.act { $0.appoint(k, to: p) } }),
+                        GamePicker("담당 직책", selection: Binding<OfficerPost?>(get: { o.post }, set: { p in _ = game.act { $0.appoint(k, to: p) } }),
                                        options: officerOptions)
                                 .frame(width: 150)
                         }
